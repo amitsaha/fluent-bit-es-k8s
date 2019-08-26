@@ -20,7 +20,6 @@ data:
 
     @INCLUDE input-kubernetes.conf
     @INCLUDE output-elasticsearch.conf
-
   input-kubernetes.conf: |
     [INPUT]
         Name              tail
@@ -31,8 +30,7 @@ data:
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   On
         Refresh_Interval  10
-
-   output-elasticsearch.conf: |
+  output-elasticsearch.conf: |
     [OUTPUT]
         Name            es
         Match           *

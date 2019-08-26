@@ -8,9 +8,11 @@ metadata:
     kubernetes.io/cluster-service: "true"
     kubernetes.io/name: "Elasticsearch"
 spec:
+  clusterIP: None
   ports:
-  - port: 9200
-    protocol: TCP
-    targetPort: db
+    - port: 9200
+      name: api
+    - port: 9300
+      name: inter-node
   selector:
     k8s-app: elasticsearch
