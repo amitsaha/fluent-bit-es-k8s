@@ -4,14 +4,12 @@ metadata:
   name: fluent-bit
   namespace: logging
   labels:
-    k8s-app: fluent-bit-logging
-    version: v1
+    k8s-app: fluent-bit-logging   
 spec:
   template:
     metadata:
       labels:
         k8s-app: fluent-bit-logging
-        version: v1
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "2020"
