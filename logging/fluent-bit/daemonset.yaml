@@ -6,14 +6,12 @@ metadata:
   labels:
     k8s-app: fluent-bit-logging
     version: v1
-    kubernetes.io/cluster-service: "true"
 spec:
   template:
     metadata:
       labels:
         k8s-app: fluent-bit-logging
         version: v1
-        kubernetes.io/cluster-service: "true"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "2020"
