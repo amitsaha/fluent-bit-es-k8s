@@ -51,8 +51,8 @@ data:
         Match           *
         Host            ${FLUENT_ELASTICSEARCH_HOST}
         Port            ${FLUENT_ELASTICSEARCH_PORT}
-        Logstash_Format On
-        Replace_Dots    On
+        Logstash_Format True
+        Logstash_Prefix fluent-bit
         Retry_Limit     False
 
   parsers.conf: |

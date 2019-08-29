@@ -10,17 +10,11 @@ spec:
     metadata:
       labels:
         k8s-app: fluent-bit-logging
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "2020"
-        prometheus.io/path: /api/v1/metrics/prometheus
     spec:
       containers:
       - name: fluent-bit
         image: fluent/fluent-bit:1.2.1
         imagePullPolicy: Always
-        ports:
-          - containerPort: 2020
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
           value: "elasticsearch"
