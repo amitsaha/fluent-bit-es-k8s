@@ -9,17 +9,15 @@ data:
   fluent-bit.conf: |
     [SERVICE]
         Flush         1
-        Log_Level     info
+        Log_Level     trace
         Daemon        off
         Parsers_File  parsers.conf
         HTTP_Server   On
         HTTP_Listen   0.0.0.0
         HTTP_Port     2020
 
-    @INCLUDE input-systemd.conf
     @INCLUDE input-kubernetes.conf
     @INCLUDE filter-kubernetes.conf
-    @INCLUDE filter-systemd.conf
     @INCLUDE output-elasticsearch.conf
 
   input-systemd.conf: |
@@ -35,9 +33,16 @@ data:
         Path              /var/log/containers/*.log
         Parser            docker
         DB                /var/log/flb_kube.db
-        Mem_Buf_Limit     5MB
         Skip_Long_Lines   On
         Refresh_Interval  10
+        Streams_File stream_processor.conf
+        routable Off
+
+  stream_processor.conf: |
+    [STREAM_TASK]
+        Name   applog
+        Exec CREATE STREAM payloads WITH(tag='applog') AS SELECT * FROM STREAM:tail.0 WHERE @record.contains(exc_info);
+        Exec CREATE STREAM nopayloads WITH(tag='systemlog') AS SELECT * FROM STREAM:tail.0 WHERE NOT @record.contains(exc_info);
 
   filter-kubernetes.conf: |
     [FILTER]
@@ -55,7 +60,7 @@ data:
     
     [FILTER]
         Name record_modifier
-        Match sytemd.*
+        Match systemd.*
         Remove_Key _CURSOR
         Remove_Key _REALTIME_TIMESTAMP
         Remove_Key _MONOTONIC_TIMESTAMP 
@@ -65,13 +70,34 @@ data:
   output-elasticsearch.conf: |
     [OUTPUT]
         Name            es
-        Match           *
+        Match           systemd.*
         Host            ${FLUENT_ELASTICSEARCH_HOST}
         Port            ${FLUENT_ELASTICSEARCH_PORT}
         
         Logstash_Format True
         Logstash_Prefix fluent-bit
         Retry_Limit     False
+
+    [OUTPUT]
+        Name            es
+        Match           systemlog 
+        Host            ${FLUENT_ELASTICSEARCH_HOST}
+        Port            ${FLUENT_ELASTICSEARCH_PORT}
+        
+        Logstash_Format True
+        Logstash_Prefix fluent-bit
+        Retry_Limit     False
+
+    [OUTPUT]
+        Name            es-1
+        Match           applog
+        Host            ${FLUENT_ELASTICSEARCH_HOST}
+        Port            ${FLUENT_ELASTICSEARCH_PORT}
+        
+        Logstash_Format True
+        Logstash_Prefix fluent-bit-app-log
+        Retry_Limit     False
+
 
   parsers.conf: |
 
