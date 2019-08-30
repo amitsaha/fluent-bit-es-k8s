@@ -35,16 +35,9 @@ data:
     [FILTER]
         Name                kubernetes
         Match               kube.*
-        Kube_URL            https://kubernetes.default.svc:443
-        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-        Kube_Tag_Prefix     kube.var.log.containers.
         Keep_Log            Off
         Merge_Log           On
-        Merge_Log_Key       app_log
-        K8S-Logging.Parser  On
-        K8S-Logging.Exclude Off
-
+  
   output-elasticsearch.conf: |
     [OUTPUT]
         Name            es
@@ -60,5 +53,5 @@ data:
         Name        docker
         Format      json
         Time_Key    time
-        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Format %Y-%m-%dT%H:%M:%S %z
         Time_Keep   On
