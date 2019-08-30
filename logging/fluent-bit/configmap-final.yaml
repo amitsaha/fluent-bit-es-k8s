@@ -55,7 +55,7 @@ data:
 
     [FILTER]
         Name record_modifier
-        Match *
+        Match sytemd.*
 
         Remove_Key _CURSOR
         Remove_Key _REALTIME_TIMESTAMP
