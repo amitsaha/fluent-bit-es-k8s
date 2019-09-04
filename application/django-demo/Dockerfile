@@ -10,6 +10,4 @@ RUN set -e; \
 	pip install -r requirements.txt; \
 	apk del .build-deps;
 EXPOSE 8000
-
-RUN chmod +x /application/start.sh
-CMD ["/application/start.sh"]
+CMD ["gunicorn", "--workers", "5", "--bind", "0.0.0.0:8000", "demo.wsgi"]
