@@ -14,20 +14,20 @@ spec:
         app: webapp
     spec:
       containers:
-      - name: django
-        image: amitsaha/do-django-demo:latest
+      - name: webapp
+        image: amitsaha/do-webapp
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
             scheme: HTTP
-            path: /
+            path: /test/
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
             scheme: HTTP
-            path: /
+            path: /test/
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 10
