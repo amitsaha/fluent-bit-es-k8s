@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: es-cluster
-  namespace: logging
+  namespace: kube-logging
   labels:
     k8s-app: elasticsearch
     version: v7.3.1 
